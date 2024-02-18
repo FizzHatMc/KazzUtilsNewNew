@@ -7,7 +7,7 @@
     "maxShiftBy": 5
   },
   "client": [
-    "MinecraftMixin"
+    "org.kazz.kazzutils.mixin.MinecraftMixin"
   ],
   "verbose": true
 }
