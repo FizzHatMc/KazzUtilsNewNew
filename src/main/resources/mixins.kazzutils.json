@@ -1,13 +1,13 @@
 {
   "compatibilityLevel": "JAVA_8",
   "minVersion": "0.7",
-  "package": "org.polyfrost.example.mixin",
-  "refmap": "mixins.examplemod.refmap.json",
+  "package": "cc.kazz.sbtrackers.mixin",
+  "refmap": "mixins.sbtrackers.refmap.json",
   "injectors": {
     "maxShiftBy": 5
   },
   "client": [
-    "org.kazz.kazzutils.mixin.MinecraftMixin"
+    "MinecraftMixin"
   ],
   "verbose": true
 }

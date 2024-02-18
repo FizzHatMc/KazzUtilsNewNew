@@ -1,16 +1,16 @@
 [
   {
-    "modid": "${id}",
-    "name": "${name}",
+    "modid": "sbtracker",
+    "name": "SbTracker",
     "description": "",
-    "version": "${version}",
+    "version": "0.1",
     "mcversion": "1.8.9",
     "url": "",
     "updateUrl": "",
     "authorList": [
-      "Your Name"
+      "Kazz"
     ],
-    "credits": "",
+    "credits": "Meine Eier",
     "logoFile": "",
     "screenshots": [],
     "dependencies": []
