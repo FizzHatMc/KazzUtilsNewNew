@@ -12,11 +12,13 @@ import org.kazz.kazzutils.command.CheckPlayerBlock;
 import org.kazz.kazzutils.command.debug;
 import org.kazz.kazzutils.command.openGUI;
 import org.kazz.kazzutils.config.Config;
+import org.kazz.kazzutils.features.dungeon.Hud.BonzoSpirit;
 import org.kazz.kazzutils.features.dungeon.m7.RenderStuff.*;
 import org.kazz.kazzutils.features.mining.StarCult;
 import org.kazz.kazzutils.utils.ChatUtils;
 import org.kazz.kazzutils.utils.CheckCatacombs;
-import org.kazz.kazzutils.utils.RenderUtils;
+import org.kazz.kazzutils.utils.TabUtils;
+import org.kazz.kazzutils.utils.TabUtilsKotlin;
 
 /**
  * The entrypoint of the Example Mod that initializes it.
@@ -57,6 +59,7 @@ public class KazzUtils {
         MinecraftForge.EVENT_BUS.register(new DragonsBoxesLines());
         MinecraftForge.EVENT_BUS.register(new CheckCatacombs());
         MinecraftForge.EVENT_BUS.register(new Colorblind());
+        //MinecraftForge.EVENT_BUS.register(new BonzoSpirit());
         MinecraftForge.EVENT_BUS.register(new ChatUtils());
     }
 
@@ -70,6 +73,8 @@ public class KazzUtils {
         } //each second
         if(tickammount % 600 == 0){
             StarCult.firstTick = false;
+            TabUtils.parseTabEntries();
+            TabUtilsKotlin.INSTANCE.parseTabEntries();
 
 
         } // 30 Sec

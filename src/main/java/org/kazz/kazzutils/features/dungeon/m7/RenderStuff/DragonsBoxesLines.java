@@ -2,12 +2,12 @@ package org.kazz.kazzutils.features.dungeon.m7.RenderStuff;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.Vec3;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.kazz.kazzutils.config.Config;
 import org.kazz.kazzutils.utils.CheckCatacombs;
 import org.kazz.kazzutils.utils.RenderUtils;
-import net.minecraft.util.Vec3;
 
 public class DragonsBoxesLines {
 

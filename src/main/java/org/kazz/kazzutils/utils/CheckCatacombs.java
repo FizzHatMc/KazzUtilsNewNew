@@ -2,7 +2,6 @@ package org.kazz.kazzutils.utils;
 
 import cc.polyfrost.oneconfig.libs.universal.ChatColor;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiPlayerTabOverlay;
 import net.minecraft.init.Blocks;
@@ -10,15 +9,11 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import org.kazz.kazzutils.KazzUtils;
 import org.kazz.kazzutils.handler.ScoreboardHandler;
-import scala.collection.parallel.ParIterableLike;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.List;
 
 public class CheckCatacombs {
@@ -83,6 +78,8 @@ public class CheckCatacombs {
                     drag.setDestroyed(false);
                 }else drag.setDestroyed(true);
             }
+
+            GuiPlayerTabOverlay tabOverlay = Minecraft.getMinecraft().ingameGUI.getTabList();
         }
     }
 

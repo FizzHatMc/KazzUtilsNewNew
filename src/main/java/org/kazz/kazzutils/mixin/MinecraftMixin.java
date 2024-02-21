@@ -1,8 +1,7 @@
-<<<<<<<< HEAD:src/main/java/org/kazz/kazzutils/mixin/MinecraftMixin.java
+
 package org.kazz.kazzutils.mixin;
-========
-package cc.kazz.sbtrackers.mixin;
->>>>>>>> 6e3c57af3de041ebb4425c583bc8a9de0bf6f3ea:src/main/java/cc/kazz/sbtrackers/mixin/MinecraftMixin.java
+
+
 
 import net.minecraft.client.Minecraft;
 import org.spongepowered.asm.mixin.Mixin;

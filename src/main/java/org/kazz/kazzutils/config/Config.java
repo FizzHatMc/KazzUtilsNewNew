@@ -5,7 +5,9 @@ import cc.polyfrost.oneconfig.config.core.OneColor;
 import cc.polyfrost.oneconfig.config.data.Mod;
 import cc.polyfrost.oneconfig.config.data.ModType;
 import org.kazz.kazzutils.KazzUtils;
-import org.kazz.kazzutils.hud.DebugHud;
+import org.kazz.kazzutils.features.farming.hud.GardenLevel;
+import org.kazz.kazzutils.features.farming.hud.NextContest;
+
 
 /**
  * The main Config entrypoint that extends the Config type and inits the config options.
@@ -102,20 +104,22 @@ public class Config extends cc.polyfrost.oneconfig.config.Config {
             max = 15F
     ) public static float cbScale = 1F;
 
+    @HUD(
+            name = "Display Garden Level",
+            category = "Farming"
+    )public static GardenLevel gardenLevel = new GardenLevel();
+
     @Switch(
-            name = "debug break",
-            description = "debug",
-            category = "debug",
-            subcategory = "debug"
-    )public static boolean brak = false;
+            name = "Display Garden Level Progress in %",
+            description = "Changes the Progress from XP missing to % to next LvL",
+            category = "Farming"
+    )public static boolean gardenPercentage = false;
 
     @HUD(
-            name = "hud",
-            category = "debug",
-            subcategory = "debug"
-    )public static DebugHud d = new DebugHud();
-
-
+            name = "Display next Contest",
+            category = "Farming",
+            subcategory = "Contest"
+    )public static NextContest contest = new NextContest();
 
 
 
@@ -123,6 +127,7 @@ public class Config extends cc.polyfrost.oneconfig.config.Config {
 
     public Config() {
         super(new Mod(KazzUtils.NAME, ModType.UTIL_QOL), KazzUtils.MODID + ".json");
+        addDependency("gardenPercentage", () -> gardenLevel.isEnabled());
         initialize();
     }
 }

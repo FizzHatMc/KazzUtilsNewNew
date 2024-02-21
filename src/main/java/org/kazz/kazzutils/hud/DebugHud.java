@@ -2,8 +2,7 @@ package org.kazz.kazzutils.hud;
 
 import cc.polyfrost.oneconfig.hud.SingleTextHud;
 import org.kazz.kazzutils.config.Config;
-import org.kazz.kazzutils.features.mining.StarCult;
-import org.kazz.kazzutils.utils.CheckCatacombs;
+import org.kazz.kazzutils.utils.TabUtils;
 
 /**
  * An example OneConfig HUD that is started in the config and displays text.
@@ -12,14 +11,13 @@ import org.kazz.kazzutils.utils.CheckCatacombs;
  */
 public class DebugHud extends SingleTextHud {
     public DebugHud() {
-        super("Debug", true);
+        super("Garden Level", false);
     }
 
     @Override
-    public String getText(boolean example) {
-        for(CheckCatacombs.WitherKingDragons drag : CheckCatacombs.WitherKingDragons.values()){
-            return drag.isDestroyed() + "";
-        }
-     return "";
+    public String getText(boolean debug) {
+        if(debug) return "Debug Test";
+        return TabUtils.gardenLevel;
+
     }
 }
