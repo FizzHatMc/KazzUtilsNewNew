@@ -14,7 +14,9 @@ import org.kazz.kazzutils.command.openGUI;
 import org.kazz.kazzutils.config.Config;
 import org.kazz.kazzutils.features.dungeon.Hud.BonzoSpirit;
 import org.kazz.kazzutils.features.dungeon.m7.RenderStuff.*;
+import org.kazz.kazzutils.features.farming.GardenPlots;
 import org.kazz.kazzutils.features.mining.StarCult;
+import org.kazz.kazzutils.features.render.GyroRange;
 import org.kazz.kazzutils.utils.ChatUtils;
 import org.kazz.kazzutils.utils.CheckCatacombs;
 import org.kazz.kazzutils.utils.TabUtils;
@@ -59,8 +61,10 @@ public class KazzUtils {
         MinecraftForge.EVENT_BUS.register(new DragonsBoxesLines());
         MinecraftForge.EVENT_BUS.register(new CheckCatacombs());
         MinecraftForge.EVENT_BUS.register(new Colorblind());
-        //MinecraftForge.EVENT_BUS.register(new BonzoSpirit());
+        MinecraftForge.EVENT_BUS.register(new BonzoSpirit());
         MinecraftForge.EVENT_BUS.register(new ChatUtils());
+        MinecraftForge.EVENT_BUS.register(new GardenPlots());
+        MinecraftForge.EVENT_BUS.register(new GyroRange());
     }
 
     @SubscribeEvent
@@ -75,8 +79,6 @@ public class KazzUtils {
             StarCult.firstTick = false;
             TabUtils.parseTabEntries();
             TabUtilsKotlin.INSTANCE.parseTabEntries();
-
-
         } // 30 Sec
         if(tickammount % 1200 == 0){
 

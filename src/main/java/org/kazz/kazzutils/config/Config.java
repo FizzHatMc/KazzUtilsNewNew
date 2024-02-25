@@ -81,7 +81,26 @@ public class Config extends cc.polyfrost.oneconfig.config.Config {
             subcategory = "M7"
     )public static boolean dragBox = false;
 
+    @Switch(
+            name = "Gyro Range",
+            description = "Displays the Range of the Gyrowand",
+            category = "Items"
+    )public static boolean gyroRange = false;
 
+    @Color(
+            name = "Gyro Range Color",
+            description = "Changes the Color of the Gyro Range",
+            category = "Items"
+    )public static OneColor gyroRangeColor = new OneColor(0, 255, 0,100);
+
+    @Slider(
+            name = "Gyro Range Scale",
+            description = "Changes the Size of the Displayed Text",
+            category = "Items",
+            min = 0F,
+            max = 10F,
+            step = 1
+    )public static float gyroRangeScale = 1F;
 
     @Switch(
             name = "Dragon Lines",
@@ -120,6 +139,8 @@ public class Config extends cc.polyfrost.oneconfig.config.Config {
             category = "Farming",
             subcategory = "Contest"
     )public static NextContest contest = new NextContest();
+
+
 
 
 

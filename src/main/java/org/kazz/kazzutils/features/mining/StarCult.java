@@ -36,12 +36,13 @@ public static boolean firstTick = false;
                 ChatUtils.messageToChat(EnumChatFormatting.RED +  "------------STAR CULT------------");
                 ChatUtils.messageToChat(EnumChatFormatting.BLUE + "--------------------------------");
 
-                RenderUtils.showTitle(EnumChatFormatting.RED + "STAR CULT");
+                RenderUtils.showTitle(EnumChatFormatting.RED + "STAR CULT","",0,20,0);
 
                 world.playSound(player.posX, player.posY, player.posZ, "random.orb",1F,1F,false);
                 break;
             }else{
                 firstTick = false;
+
             }
         }
     }
