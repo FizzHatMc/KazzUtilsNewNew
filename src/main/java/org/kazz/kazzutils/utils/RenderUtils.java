@@ -1,6 +1,5 @@
 package org.kazz.kazzutils.utils;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderGlobal;
@@ -11,16 +10,22 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.*;
 import org.lwjgl.opengl.GL11;
+
 import java.awt.*;
 
+import static org.kazz.kazzutils.KazzUtils.mc;
 
 
 public class RenderUtils {
+    public static String title = null;
+    public static String subtitle = null;
+    public static int titleDisplayTicks = 0;
+    public static int subtitleDisplayTicks = 0;
 
     private static final ResourceLocation beaconBeam = new ResourceLocation("textures/entity/beacon_beam.png");
 
     public static void drawCustomBox(double x, double xwidth, double y, double ywidth, double z, double zwidth, Color color, float thickness, boolean phase) {
-        RenderManager renderManager = Minecraft.getMinecraft().getRenderManager();
+        RenderManager renderManager = mc.getRenderManager();
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldRenderer = Tessellator.getInstance().getWorldRenderer();
 
@@ -80,7 +85,7 @@ public class RenderUtils {
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
 
-        Minecraft.getMinecraft().getTextureManager().bindTexture(beaconBeam);
+        mc.getTextureManager().bindTexture(beaconBeam);
         GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, 10497.0F);
         GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, 10497.0F);
         GlStateManager.disableLighting();
@@ -90,7 +95,7 @@ public class RenderUtils {
         GlStateManager.enableBlend();
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
 
-        double time = Minecraft.getMinecraft().theWorld.getTotalWorldTime() + (double) partialTicks;
+        double time = mc.theWorld.getTotalWorldTime() + (double) partialTicks;
         double d1 = MathHelper.func_181162_h(-time * 0.2D - (double) MathHelper.floor_double(-time * 0.1D));
 
         float r = ((rgb >> 16) & 0xFF) / 255f;
@@ -228,7 +233,7 @@ public class RenderUtils {
 
         GlStateManager.pushMatrix();
 
-        Entity viewer = Minecraft.getMinecraft().getRenderViewEntity();
+        Entity viewer = mc.getRenderViewEntity();
         double viewerX = viewer.lastTickPosX + (viewer.posX - viewer.lastTickPosX) * partialTicks;
         double viewerY = viewer.lastTickPosY + (viewer.posY - viewer.lastTickPosY) * partialTicks;
         double viewerZ = viewer.lastTickPosZ + (viewer.posZ - viewer.lastTickPosZ) * partialTicks;
@@ -249,12 +254,12 @@ public class RenderUtils {
 
         drawNametag(str);
 
-        GlStateManager.rotate(-Minecraft.getMinecraft().getRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
-        GlStateManager.rotate(Minecraft.getMinecraft().getRenderManager().playerViewX, 1.0F, 0.0F, 0.0F);
+        GlStateManager.rotate(-mc.getRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
+        GlStateManager.rotate(mc.getRenderManager().playerViewX, 1.0F, 0.0F, 0.0F);
 
         GlStateManager.translate(0, -0.25f, 0);
-        GlStateManager.rotate(-Minecraft.getMinecraft().getRenderManager().playerViewX, 1.0F, 0.0F, 0.0F);
-        GlStateManager.rotate(Minecraft.getMinecraft().getRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
+        GlStateManager.rotate(-mc.getRenderManager().playerViewX, 1.0F, 0.0F, 0.0F);
+        GlStateManager.rotate(mc.getRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
 
         drawNametag(EnumChatFormatting.YELLOW.toString() + Math.round(dist) + "m");
 
@@ -268,7 +273,7 @@ public class RenderUtils {
 
         GlStateManager.pushMatrix();
 
-        Entity viewer = Minecraft.getMinecraft().getRenderViewEntity();
+        Entity viewer = mc.getRenderViewEntity();
         double viewerX = viewer.lastTickPosX + (viewer.posX - viewer.lastTickPosX) * partialTicks;
         double viewerY = viewer.lastTickPosY + (viewer.posY - viewer.lastTickPosY) * partialTicks;
         double viewerZ = viewer.lastTickPosZ + (viewer.posZ - viewer.lastTickPosZ) * partialTicks;
@@ -289,12 +294,12 @@ public class RenderUtils {
         GlStateManager.scale(scale, scale, scale);
         drawNametag(str);
 
-        GlStateManager.rotate(-Minecraft.getMinecraft().getRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
-        GlStateManager.rotate(Minecraft.getMinecraft().getRenderManager().playerViewX, 1.0F, 0.0F, 0.0F);
+        GlStateManager.rotate(-mc.getRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
+        GlStateManager.rotate(mc.getRenderManager().playerViewX, 1.0F, 0.0F, 0.0F);
 
         GlStateManager.translate(0, -0.25f, 0);
-        GlStateManager.rotate(-Minecraft.getMinecraft().getRenderManager().playerViewX, 1.0F, 0.0F, 0.0F);
-        GlStateManager.rotate(Minecraft.getMinecraft().getRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
+        GlStateManager.rotate(-mc.getRenderManager().playerViewX, 1.0F, 0.0F, 0.0F);
+        GlStateManager.rotate(mc.getRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
 
         //drawNametag(EnumChatFormatting.YELLOW.toString()+Math.round(dist)+"m");
 
@@ -310,13 +315,13 @@ public class RenderUtils {
      * @author Moulberry
      */
     public static void drawNametag(String str) {
-        FontRenderer fontrenderer = Minecraft.getMinecraft().fontRendererObj;
+        FontRenderer fontrenderer = mc.fontRendererObj;
         float f = 1.6F;
         float f1 = 0.016666668F * f;
         GlStateManager.pushMatrix();
         GL11.glNormal3f(0.0F, 1.0F, 0.0F);
-        GlStateManager.rotate(-Minecraft.getMinecraft().getRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
-        GlStateManager.rotate(Minecraft.getMinecraft().getRenderManager().playerViewX, 1.0F, 0.0F, 0.0F);
+        GlStateManager.rotate(-mc.getRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
+        GlStateManager.rotate(mc.getRenderManager().playerViewX, 1.0F, 0.0F, 0.0F);
         GlStateManager.scale(-f1, -f1, f1);
         GlStateManager.disableLighting();
         GlStateManager.depthMask(false);
@@ -355,7 +360,7 @@ public class RenderUtils {
      */
 
     public static void drawOutlinedBoundingBox(AxisAlignedBB aabb, Color color, float width, float partialTicks) {
-        Entity render = Minecraft.getMinecraft().getRenderViewEntity();
+        Entity render = mc.getRenderViewEntity();
         double realX = interpolate(render.posX, render.lastTickPosX, partialTicks);
         double realY = interpolate(render.posY, render.lastTickPosY, partialTicks);
         double realZ = interpolate(render.posZ, render.lastTickPosZ, partialTicks);
@@ -382,7 +387,7 @@ public class RenderUtils {
     }
 
     public static void drawLine(Vec3 pos1, Vec3 pos2, Color color, Float partialTicks) {
-        Entity render = Minecraft.getMinecraft().getRenderViewEntity();
+        Entity render = mc.getRenderViewEntity();
         double realX = render.lastTickPosX + (render.posX - render.lastTickPosX) * partialTicks;
         double realY = render.lastTickPosY + (render.posY - render.lastTickPosY) * partialTicks;
         double realZ = render.lastTickPosZ + (render.posZ - render.lastTickPosZ) * partialTicks;
@@ -417,7 +422,7 @@ public class RenderUtils {
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
 
-        Entity player = Minecraft.getMinecraft().getRenderViewEntity();
+        Entity player = mc.getRenderViewEntity();
         double playerX = player.lastTickPosX + (player.posX - player.lastTickPosX) * partialTicks;
         double playerY = player.lastTickPosY + (player.posY - player.lastTickPosY) * partialTicks;
         double playerZ = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * partialTicks;
@@ -485,16 +490,7 @@ public class RenderUtils {
         GL11.glEnable(GL11.GL_DEPTH_TEST);
     }
 
-    public static void showTitle(String title, String subtitle, int fadeIn, int displayTime, int fadeOut) {
-        Minecraft.getMinecraft().ingameGUI.displayTitle(title, subtitle, fadeIn, displayTime, fadeOut);
-    }
-
-    public static void showTitle(String title) {
-        Minecraft.getMinecraft().ingameGUI.displayTitle(title, "", 1, 20, 1);
-    }
-
     private static Vec3 getRenderPos(Vec3 vec) {
-        Minecraft mc = Minecraft.getMinecraft();
         double renderPosX = mc.getRenderManager().viewerPosX;
         double renderPosY = mc.getRenderManager().viewerPosY;
         double renderPosZ = mc.getRenderManager().viewerPosZ;
@@ -551,4 +547,14 @@ public class RenderUtils {
         GlStateManager.popMatrix();
     }
 
-}
+
+
+
+
+
+
+    }
+
+
+
+

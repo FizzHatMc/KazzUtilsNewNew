@@ -5,6 +5,10 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiPlayerTabOverlay;
 import net.minecraft.init.Blocks;
+import net.minecraft.scoreboard.Score;
+import net.minecraft.scoreboard.ScoreObjective;
+import net.minecraft.scoreboard.ScorePlayerTeam;
+import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumChatFormatting;
@@ -14,7 +18,10 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.kazz.kazzutils.handler.ScoreboardHandler;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
+
+import static org.kazz.kazzutils.KazzUtils.mc;
 
 public class CheckCatacombs {
     private static String lastmsg;
@@ -27,35 +34,7 @@ public class CheckCatacombs {
     public static final BlockPos[] blue = {new BlockPos(84,14,94), new BlockPos(80,18,104)};
     public static final BlockPos[] purp = {new BlockPos(56, 14, 125), new BlockPos(56, 14, 125)};
 
-
-    /*public static void checkCata() {
-        List<String> scoreboard = ScoreboardHandler.getSidebarLines();
-        for (String s : scoreboard) {
-            String sCleaned = ScoreboardHandler.cleanSB(s);
-            if (sCleaned.contains("Keys:")) {
-                List<String> sBoard = ScoreboardHandler.getSidebarLines();
-                for (String t : sBoard) {
-                    String tCleaned = ScoreboardHandler.cleanSB(t);
-                    if (tCleaned.contains("The Catacombs")) {
-                        floor = sCleaned.substring(sCleaned.indexOf("(") + 1, sCleaned.indexOf(")"));
-                        if (floor.equals("M7")) inM7 = true;
-                    }
-                }
-            } else if (sCleaned.contains("Time Elapsed:")) {
-                List<String> sBoard = ScoreboardHandler.getSidebarLines();
-                for (String t : sBoard) {
-                    String tCleaned = ScoreboardHandler.cleanSB(t);
-                    if (!tCleaned.contains("The Catacombs")) {
-                        inM7 = true;
-                    }
-                }
-            }
-        }
-    }
-
-     */
-
-    public static void checkCata2() {
+    public static void checkCata() {
         List<String> scoreboard = ScoreboardHandler.getSidebarLines();
         for (String s : scoreboard) {
             String sCleaned = ScoreboardHandler.cleanSB(s);
@@ -65,6 +44,46 @@ public class CheckCatacombs {
             }
         }
     }
+
+    public static String stripColorCodes(String string) {
+        return string.replaceAll("§.", "");
+    }
+
+
+    public static List<String> getLines() {
+        Scoreboard scoreboard = mc.thePlayer.getWorldScoreboard();
+        ScoreObjective sidebarObjective = scoreboard.getObjectiveInDisplaySlot(1);
+        List<Score> scores = new ArrayList<>(scoreboard.getSortedScores(sidebarObjective));
+        List<String> lines = new ArrayList<>();
+        for (int i = scores.size() - 1; i >= 0; i--) {
+            Score score = scores.get(i);
+            ScorePlayerTeam scoreplayerteam1 = scoreboard.getPlayersTeam(score.getPlayerName());
+            String line = ScorePlayerTeam.formatPlayerName(scoreplayerteam1, score.getPlayerName());
+            lines.add(line);
+        }
+        return lines;
+    }
+
+    public static boolean inM7() {
+        List<String> lines = getLines();
+        if (lines.size() < 4) {
+            inM7 = false;
+            return false;
+        }
+        String line = lines.get(3);
+        String unformattedText = null;
+        if (line != null) {
+            unformattedText = line.replaceAll("\\p{So}|\\p{Sk}", "");
+            unformattedText = stripColorCodes(unformattedText);
+        }
+        if ("  The Catacombs (M7)".equals(unformattedText)) {
+            inM7 = true;
+            return true;
+        }
+        inM7 = false;
+        return false;
+    }
+
 
     //
 
@@ -79,27 +98,31 @@ public class CheckCatacombs {
                 }else drag.setDestroyed(true);
             }
 
-            GuiPlayerTabOverlay tabOverlay = Minecraft.getMinecraft().ingameGUI.getTabList();
+            GuiPlayerTabOverlay tabOverlay = mc.ingameGUI.getTabList();
+        }
+    }
+
+    @SubscribeEvent
+    public void onChatReceive(ClientChatReceivedEvent event) {
+        lastmsg = event.message.getFormattedText();
+
+        for(WitherKingDragons drag : WitherKingDragons.values()) {
+            if(lastmsg.contains(drag.getItemName())) {
+               ChatUtils.messageToChat("Recieved " + drag.getItemName());
+               drag.pickedUp = true;
+            }
         }
     }
 
 
 
-
-
-    @SubscribeEvent
-    public void onChatReceive(ClientChatReceivedEvent event) {
-        lastmsg = event.message.getFormattedText();
-    }
-
-
     public enum WitherKingDragons {
 
-        POWER("Red", new BlockPos(27, 14, 59), Color.RED, ChatColor.RED, red,new BlockPos(20,6,59), EnumChatFormatting.RED),
-        APEX("Green", new BlockPos(27, 14, 94), Color.GREEN, ChatColor.GREEN, green, new BlockPos(20,6,94), EnumChatFormatting.GREEN),
-        SOUL("Purple", new BlockPos(56, 14, 125), Color.MAGENTA, ChatColor.DARK_PURPLE, purp, new BlockPos(56,8,132), EnumChatFormatting.LIGHT_PURPLE),
-        ICE("Blue", new BlockPos(84, 14, 94), Color.CYAN, ChatColor.AQUA, blue, new BlockPos(91,6,94), EnumChatFormatting.BLUE),
-        FLAME("Orange", new BlockPos(85, 14, 56), Color.ORANGE, ChatColor.GOLD, orange, new BlockPos(92,6,56), EnumChatFormatting.GOLD);
+        POWER("Red", new BlockPos(27, 14, 59), Color.RED, ChatColor.RED, red,new BlockPos(20,6,59), EnumChatFormatting.RED, new BlockPos(51.5,6.5,42.5)),
+        APEX("Green", new BlockPos(27, 14, 94), Color.GREEN, ChatColor.GREEN, green, new BlockPos(20,6,94), EnumChatFormatting.GREEN, new BlockPos(49.5,6.5,44.5)),
+        SOUL("Purple", new BlockPos(56, 14, 125), Color.MAGENTA, ChatColor.DARK_PURPLE, purp, new BlockPos(56,8,132), EnumChatFormatting.LIGHT_PURPLE, new BlockPos(54.5,6.5,41.5)),
+        ICE("Blue", new BlockPos(84, 14, 94), Color.CYAN, ChatColor.AQUA, blue, new BlockPos(91,6,94), EnumChatFormatting.BLUE, new BlockPos(59.5,6.5,44.5)),
+        FLAME("Orange", new BlockPos(85, 14, 56), Color.ORANGE.brighter(), ChatColor.GOLD, orange, new BlockPos(92,6,56), EnumChatFormatting.GOLD, new BlockPos(57.5,6.5,42.5));
 
 
 
@@ -118,7 +141,10 @@ public class CheckCatacombs {
         private final BlockPos relic;
         private final BlockPos dragonText;
         private final EnumChatFormatting enumChatFormatting;
+        private boolean pickedUp = false;
+        private BlockPos cauldron;
 
+        public boolean getPicked(){return this.pickedUp;}
 
         public String getTextColor() {
             return textColor;
@@ -184,7 +210,10 @@ public class CheckCatacombs {
             return enumChatFormatting;
         }
 
-        WitherKingDragons(String textColor, BlockPos blockPos, Color color, ChatColor chatColor, BlockPos[] lineCoords, BlockPos relic, EnumChatFormatting enumChatFormatting) {
+        public BlockPos getCauldron(){
+            return cauldron;
+        }
+        WitherKingDragons(String textColor, BlockPos blockPos, Color color, ChatColor chatColor, BlockPos[] lineCoords, BlockPos relic, EnumChatFormatting enumChatFormatting, BlockPos cauldron) {
             this.textColor = textColor;
             this.blockPos = blockPos;
             this.color = color;
@@ -207,6 +236,7 @@ public class CheckCatacombs {
             this.relic = relic;
             this.dragonText = relic.up(4);
             this.enumChatFormatting = enumChatFormatting;
+            this.cauldron = cauldron;
         }
 
 

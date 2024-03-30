@@ -4,10 +4,9 @@ import com.google.common.collect.ComparisonChain
 import com.google.common.collect.Ordering
 import net.minecraft.client.Minecraft
 import net.minecraft.client.network.NetworkPlayerInfo
-import net.minecraft.world.WorldSettings.GameType
+import net.minecraft.world.WorldSettings
 
 object TabUtilsKotlin {
-
     private val visitorPattern = "Visitors: \\((.+)\\)".toRegex()
     private val areaPattern = "Area: (.+)".toRegex()
     private val mc = Minecraft.getMinecraft()
@@ -20,7 +19,13 @@ object TabUtilsKotlin {
     var timeTillNextVisitor: String = ""
     var numVisitors: Int = 0
     var archerName: String = ""
+    var tankName: String = ""
+    var healerName: String = ""
+    var mageName: String = ""
+    var berserkerName: String = ""
     var gardenLevel : Int = 0
+    var gardenLevelString : String = ""
+    var gardenLevelBool : Boolean = false
     var gardenPercent : Double = 0.0
     var trimmed : String = ""
     var first : String = ""
@@ -50,6 +55,9 @@ object TabUtilsKotlin {
      * to happen somewhat frequently.
      */
     fun parseTabEntries() {
+        if(mc.thePlayer == null) return
+        if(mc.theWorld == null) return
+
         // exploFlag is just telling the loop that the next line is the relevant tab entry
         var exploFlag = false
         var numVisitorsFlag = false
@@ -74,10 +82,16 @@ object TabUtilsKotlin {
                 }
 
                 trimmed.contains("Garden Level:") ->{
-                  //gardenLevel = trimmed.split(":")[1]
-                    gardenLevel = trimmed.subSequence(trimmed.indexOf(":")+2, trimmed.indexOf(":")+4).toString().toInt()
-                    if(gardenLevel != 15)gardenPercent = trimmed.subSequence(trimmed.indexOf("(")+1, trimmed.indexOf(")")-7).toString().toDouble()
-
+                    //gardenLevel = trimmed.split(":")[1]
+                    if(!trimmed.contains("[a-zA-Z]+") && trimmed.length > 2) {
+                        gardenLevel = trimmed.subSequence(trimmed.indexOf(":") + 2, trimmed.indexOf(":") + 4).toString().replace(" ", "").toInt()
+                        if (gardenLevel != 15) gardenPercent = trimmed.subSequence(trimmed.indexOf("(") + 1, trimmed.indexOf(")") - 7).toString().toDouble()
+                        gardenLevelBool = true
+                    }else{
+                       gardenLevelString  = trimmed.subSequence(trimmed.indexOf(":") + 2, trimmed.indexOf(":") + 4).toString().replace(" ", "")
+                        gardenLevelBool = false
+                    }
+                    area = "Garden"
                 }
 
                 trimmed.startsWith("Time Left: ") -> {
@@ -88,8 +102,12 @@ object TabUtilsKotlin {
 
 
                 trimmed.contains("Contest:") ->{
+                    if(scoreboardList == null)return
                     var index = scoreboardList.indexOf(line)+1
-                    time = scoreboardList[index].subSequence(scoreboardList[index].indexOf(": ")+2,scoreboardList[index].indexOf("m")+1).toString()
+                    if(index == -1)return
+                    //time = scoreboardList[index].subSequence(scoreboardList[index].indexOf(": ")+2,scoreboardList[index].indexOf("m")+1).toString()
+                    //time = scoreboardList[index].split(": ")[1]
+                    time = scoreboardList[index].subSequence(scoreboardList[index].indexOf(": ")+2,scoreboardList[index].length).toString()
                     index++
                     first = scoreboardList[index]
                     index++
@@ -117,6 +135,22 @@ object TabUtilsKotlin {
                 line.contains("(Archer") -> {
                     archerName = line.split(" ")[1]
                 }
+
+                line.contains("(Tank") -> {
+                    tankName = line.split(" ")[1]
+                }
+
+                line.contains("(Mage") -> {
+                    mageName = line.split(" ")[1]
+                }
+
+                line.contains("(Healer") -> {
+                    healerName = line.split(" ")[1]
+                }
+
+                line.contains("(Berserker") -> {
+                    berserkerName = line.split(" ")[1]
+                }
             }
         }
 
@@ -134,5 +168,11 @@ object TabUtilsKotlin {
         }
     }
 
-    private fun GameType.isSpectator() = this == GameType.SPECTATOR
+    private fun WorldSettings.GameType.isSpectator() = this == WorldSettings.GameType.SPECTATOR
 }
+
+
+/*
+
+
+ */

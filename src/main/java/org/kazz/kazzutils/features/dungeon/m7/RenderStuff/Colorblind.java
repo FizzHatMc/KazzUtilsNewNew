@@ -12,9 +12,10 @@ public class Colorblind {
     @SubscribeEvent
     public void onWorldRender(RenderWorldLastEvent event){
         EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
-        if (player.posY < 50  && (CheckCatacombs.floor.contains("F7") || CheckCatacombs.inM7) && Config.colorBlind) {
+        if (player.posY < 50  && (CheckCatacombs.floor.contains("F7") || CheckCatacombs.inM7()) && Config.colorBlind) {
             for(CheckCatacombs.WitherKingDragons drag : CheckCatacombs.WitherKingDragons.values()){
                 RenderUtils.renderWaypointText(drag.getEnumChatFormatting() + drag.getTextColor(), drag.getDragonText(), event.partialTicks,Config.cbScale);
+                //RenderUtils.renderBoxOutline(drag.getCauldron(),1,1,1,event.partialTicks,3.69F,drag.getColor(),drag.getColor().getAlpha());
             }
         }
     }

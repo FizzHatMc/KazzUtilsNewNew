@@ -2,11 +2,14 @@ package org.kazz.kazzutils.config;
 
 import cc.polyfrost.oneconfig.config.annotations.*;
 import cc.polyfrost.oneconfig.config.core.OneColor;
+import cc.polyfrost.oneconfig.config.data.InfoType;
 import cc.polyfrost.oneconfig.config.data.Mod;
 import cc.polyfrost.oneconfig.config.data.ModType;
 import org.kazz.kazzutils.KazzUtils;
+import org.kazz.kazzutils.features.events.mytho.hud.mobTrackerHud;
 import org.kazz.kazzutils.features.farming.hud.GardenLevel;
 import org.kazz.kazzutils.features.farming.hud.NextContest;
+import org.kazz.kazzutils.features.hud.PetOverlay;
 
 
 /**
@@ -66,6 +69,27 @@ public class Config extends cc.polyfrost.oneconfig.config.Config {
             category = "Dungeon"
     )public static String termT = "Terminal";
 
+    @Switch(
+            name = "Tank Range",
+            description = "Displays the Range of the Tank",
+            category = "Dungeon",
+            subcategory = "Tank"
+    )public static boolean tankRange = false;
+
+    @Color(
+            name = "Tank Range Color",
+            description = "Changes the Color of the Tank Range",
+            category = "Dungeon",
+            subcategory = "Tank"
+    )public static OneColor tankRangeColor = new OneColor(0, 255, 0,100);
+
+    @Switch(
+            name = "Bone Necklace",
+            description = "Increases the Tank Range due to the Ability of the Bone Necklace",
+            category = "Dungeon",
+            subcategory = "Tank"
+    )public static boolean boneNecklace = false;
+
     @Text(
             name = "Relic Waypoint Text",
             description = "Changes the Displayed Text of the Relic Waypoints",
@@ -80,6 +104,46 @@ public class Config extends cc.polyfrost.oneconfig.config.Config {
             category = "Dungeon",
             subcategory = "M7"
     )public static boolean dragBox = false;
+
+    @Dropdown(
+            name = "Highlight Class",
+            description = "What Other Dungeon Class do u want to Highlight  ",
+            category = "Dungeon",
+            subcategory = "Class",
+            options = {"Tank", //0
+                    "Mage",    //1
+                    "Healer",  //2
+                    "Bers",    //3
+                    "Archer",  //4
+                    "NON"      //5
+            }
+    )public static int highlightClass = 5;
+
+    @Color(
+            name = "Highlight Class Box Color",
+            description = "Changes the Color of the highlighted classes Box",
+            category = "Dungeon",
+            subcategory = "Class"
+    )public static OneColor highlightClassColor = new OneColor(0, 255, 0,100);
+
+    @Switch(
+            name = "Dragon Lines",
+            description = "Enables Lines within the Kill Boxes of M7 Dragons (Paths)",
+            category = "Dungeon",
+            subcategory = "M7"
+    )public static boolean dragLines = false;
+
+    @Color(
+            name = "Bonzo/Spirit Color",
+            description = "Changes the Color of the Bonzo/Spirit Notifaction",
+            category = "Dungeon"
+    )public static OneColor bonzoColor = new OneColor(0, 255, 0,100);
+
+
+
+
+
+
 
     @Switch(
             name = "Gyro Range",
@@ -102,12 +166,10 @@ public class Config extends cc.polyfrost.oneconfig.config.Config {
             step = 1
     )public static float gyroRangeScale = 1F;
 
-    @Switch(
-            name = "Dragon Lines",
-            description = "Enables Lines within the Kill Boxes of M7 Dragons (Paths)",
-            category = "Dungeon",
-            subcategory = "M7"
-    )public static boolean dragLines = false;
+
+
+
+
 
     @Switch(
             name = "Colorblind",
@@ -123,6 +185,16 @@ public class Config extends cc.polyfrost.oneconfig.config.Config {
             max = 15F
     ) public static float cbScale = 1F;
 
+    @Switch(
+            name = "Highlight Cauldron",
+            description = "Highlights the Cauldron for the M7 Dragons",
+            category = "Colorblind"
+    )public static boolean cauldron = false;
+
+
+
+
+
     @HUD(
             name = "Display Garden Level",
             category = "Farming"
@@ -136,15 +208,93 @@ public class Config extends cc.polyfrost.oneconfig.config.Config {
 
     @HUD(
             name = "Display next Contest",
+
+
+
+
             category = "Farming",
             subcategory = "Contest"
     )public static NextContest contest = new NextContest();
 
 
 
+    /*
+    @Switch(
+            name = "Toggle Hotkey",
+            description = "",
+            category = "Hotkeys"
+    )public static boolean hotkeys = false;
+
+    @Text(
+            name = "First Command",
+            category = "Hotkeys"
+    )public static String firstCommand = "";
+     */
 
 
 
+
+
+
+    @Info(
+            text = "All of the Below Features need their Respecive Tab Widget to be turned on.",
+            size = 2,
+            type = InfoType.WARNING,
+            category = "Tab Widgets"
+    )public static boolean ignored;
+
+    @HUD(
+            name = "Pet Overlay",
+            category = "Tab Widgets"
+    )public static PetOverlay petOverlay = new PetOverlay();
+
+
+
+
+
+
+    @Switch(
+            name = "Party Commands",
+            category = "Miscellaneous",
+            subcategory = "Party"
+    )public static boolean partyCommands = true;
+
+    @Dropdown(
+            name = "Prefix",
+            category = "Miscellaneous",
+            subcategory = "Party",
+            description = "What Prefix do you want to use for the Chat Commands",
+            options = {".","?","!"}
+    )public static int prefix = 2;
+
+
+
+
+
+    @Info(
+            text = "DOES NOT SAVE BETWEEN RESTARTS AT THE MOMENT",
+            type = InfoType.INFO,
+            category = "Events"
+    )
+    public static boolean ignored2;
+
+    @HUD(
+            name = "Mythological Tracker",
+            category = "Events"
+    )public static mobTrackerHud mobtrackerHud = new mobTrackerHud();
+
+
+
+
+
+/*
+
+    @HUD(
+            name = "Dungeon Overlay",
+            category = "Debug"
+    )public static DebugHud debugHud = new DebugHud();
+
+*/
 
     public Config() {
         super(new Mod(KazzUtils.NAME, ModType.UTIL_QOL), KazzUtils.MODID + ".json");

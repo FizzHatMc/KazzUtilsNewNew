@@ -13,19 +13,11 @@ public class DragonsBoxesLines {
 
     @SubscribeEvent(receiveCanceled = true)
     public void onWorldRender(RenderWorldLastEvent event){
-        /*
-        if(Minecraft.getMinecraft().thePlayer.posY<50 && Config.dragLines){
-            drawLines(Lines.getOrangeLinePos(), Color.orange,event);
-            drawLines(Lines.getGreenLinePos(), Color.GREEN,event);
-            drawLines(Lines.getRedLinePos(), Color.RED,event);
-            drawLines(Lines.getBlueLinePos(), Color.CYAN,event);
-        }
-         */
 
         for(CheckCatacombs.WitherKingDragons drag : CheckCatacombs.WitherKingDragons.values()) {
             if(drag.isDestroyed()) continue;
             if(!Config.dragLines) break;
-            if(!(Minecraft.getMinecraft().thePlayer.posY<50)) break;
+            if(!(Minecraft.getMinecraft().thePlayer.posY<50) && !CheckCatacombs.inM7()) break;
             BlockPos[] blockPos = drag.getLineCoords();
             for (int i = 1; i < blockPos.length; i++) {
 

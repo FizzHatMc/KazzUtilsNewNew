@@ -1,16 +1,24 @@
 package org.kazz.kazzutils.features.farming.hud;
 
-import cc.polyfrost.oneconfig.hud.SingleTextHud;
-import org.kazz.kazzutils.utils.TabUtilsKotlin;
+import cc.polyfrost.oneconfig.hud.TextHud;
+import net.minecraft.util.ResourceLocation;
+import org.kazz.kazzutils.utils.TabUtils;
 
-public class NextContest extends SingleTextHud {
+import java.util.List;
 
-    public NextContest(){super("Next: ", false);}
+public class NextContest extends TextHud {
+
+    public NextContest(){super(false);}
 
     @Override
-    protected String getText(boolean example) {
+    public void getLines(List<String> lines, boolean example) {
+        if(!TabUtils.area.equals("Garden"))return;
+        if(example) lines.add(0,"Next Contest");
 
-        //return TabUtilsKotlin.INSTANCE.getCropList().get(0) + " " + TabUtilsKotlin.INSTANCE.getCropList().get(1) + " " + TabUtilsKotlin.INSTANCE.getCropList().get(2);
-        return TabUtilsKotlin.INSTANCE.getFirst() + " " + TabUtilsKotlin.INSTANCE.getSecond() + " " + TabUtilsKotlin.INSTANCE.getThird() + " (" + TabUtilsKotlin.INSTANCE.getTime() + ")";
+        final ResourceLocation texture = new ResourceLocation("minecraft", "textures/items/carrot.png");
+
+        lines.add(0,TabUtils.first + " " + TabUtils.second + " " + TabUtils.third + " §7(§3" + TabUtils.time + "§7)");
+
+
     }
 }

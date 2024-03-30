@@ -4,7 +4,6 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -32,7 +31,8 @@ public class GyroRange {
 
         RenderUtils.drawCylinder(new Vec3(pos).addVector(0.5,1.0,0.5),
     10f,10f-Config.gyroRangeScale,0.2f,40,1,0f,0f,0f,
-                color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255F, color.getAlpha() / 255f,false,false);
+                color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255F, color.getAlpha() / 255f,
+                false,false);
 
     }
 

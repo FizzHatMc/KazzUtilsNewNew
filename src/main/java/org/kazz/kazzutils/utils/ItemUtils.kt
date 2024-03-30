@@ -1,10 +1,10 @@
 package org.kazz.kazzutils.utils
 
+import net.minecraft.client.Minecraft
 import net.minecraft.inventory.ContainerChest
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import java.awt.Color
-import net.minecraft.client.Minecraft
 
 object ItemUtils {
     private val FORMATTING_CODE_PATTERN = Regex("§[0-9a-fk-or]", RegexOption.IGNORE_CASE)

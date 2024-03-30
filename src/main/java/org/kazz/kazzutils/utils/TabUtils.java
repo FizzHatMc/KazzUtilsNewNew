@@ -1,22 +1,32 @@
 package org.kazz.kazzutils.utils;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.network.NetworkPlayerInfo;
-import net.minecraft.world.WorldSettings;
 
-import java.util.Collections;
-import java.util.Comparator;
+import com.google.common.collect.ComparisonChain;
+import com.google.common.collect.Ordering;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.network.NetworkPlayerInfo;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.WorldSettings;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class TabUtils {
+import static java.util.Collections.emptyList;
+import static org.kazz.kazzutils.KazzUtils.mc;
 
-    private static Minecraft mc = Minecraft.getMinecraft();
-    private static final Pattern visitorPattern = Pattern.compile("Visitors: \\((.+)\\)");
-    private static final Pattern areaPattern = Pattern.compile("Area: (.+)");
+public class TabUtils {
+    private static Pattern areaPattern = Pattern.compile("Area: (.+)");
+    private static List<String> tablist = null;
     public static String area = "";
     public static boolean explosivity = false;
     public static boolean maxVisitors = false;
@@ -25,136 +35,194 @@ public class TabUtils {
     public static String timeTillNextVisitor = "";
     public static int numVisitors = 0;
     public static String archerName = "";
-    public static String gardenLevel;
+    public static String tankName = "";
+    public static String healerName = "";
+    public static String mageName = "";
+    public static String berserkerName = "";
+    public static int gardenLevel = 0;
+    public static double gardenPercent = 0.0;
+    public static String trim = "";
+    public static String first = "";
+    public static String second = "";
+    public static String third = "";
+    public static String time = "";
+    static playerInfoOrdering p = new playerInfoOrdering();
+    private static boolean petFlag = false;
+    private static int petFlagCount = 0;
+    public static String petName = "";
+    public static String petXp = "";
+    public static String petNameUnform = "";
+    //public static String petXp = "";
+    public static Boolean gardenLevelBool = false;
+    public static String gardenLevelString = "";
 
-    private static boolean isSpectator(WorldSettings.GameType gameType) {
-        return WorldSettings.GameType.SPECTATOR == gameType;
+    public static EntityPlayer getPlayerByName(String playerName) {
+        List<EntityPlayer> players = mc.theWorld.playerEntities; // Assuming mc is your Minecraft instance
+
+        for (EntityPlayer player : players) {
+            if (player.getName().equals(playerName)) {
+                return player;
+            }
+        }
+
+        return null; // Player not found
     }
 
-    private static Comparator<NetworkPlayerInfo> playerInfoOrdering = (info1, info2) -> {
-        if (info1 == null) return -1;
-        if (info2 == null) return 1;
-        int spectatorComparison = Boolean.compare(!isSpectator(info2.getGameType()), !isSpectator(info1.getGameType()));
-        if (spectatorComparison != 0) return spectatorComparison;
-        //int teamComparison = info1.getPlayerTeam().getRegisteredName().compareTo(info2.getPlayerTeam().getRegisteredName());
-        //if (teamComparison != 0) return teamComparison;
-        return info1.getGameProfile().getName().compareTo(info2.getGameProfile().getName());
-    };
+    @SideOnly(Side.CLIENT)
+    public static class playerInfoOrdering extends Ordering<NetworkPlayerInfo> {
 
-    public static List<NetworkPlayerInfo> fetchTabEntries() {
-        if (mc.thePlayer == null) return Collections.emptyList();
-        return mc.thePlayer.sendQueue.getPlayerInfoMap().stream()
-                .sorted(playerInfoOrdering)
-                .collect(Collectors.toList());
+
+        @Override
+        public int compare(NetworkPlayerInfo info1, NetworkPlayerInfo info2) {
+            if (info1 == null) return -1;
+            if (info2 == null) return 0;
+            return ComparisonChain.start()
+                    .compareTrueFirst(!isSpectator(info1.getGameType()), !isSpectator(info2.getGameType()))
+                    .compare(info1.getPlayerTeam() != null ? info1.getPlayerTeam().getRegisteredName() : "",
+                            info2.getPlayerTeam() != null ? info2.getPlayerTeam().getRegisteredName() : "")
+                    .compare(info1.getGameProfile().getName(), info2.getGameProfile().getName())
+                    .result();
+        }
     }
 
-    public static void parseTabEntries() {
-        boolean exploFlag = false;
-        boolean numVisitorsFlag = false;
-        List<String> scoreboardList = fetchTabEntries().stream()
-                .map(info -> info.getDisplayName() != null ? info.getDisplayName().getUnformattedText() : null)
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
 
-        for (String line : scoreboardList) {
-            String trimmed = line.trim();
-            Matcher areaMatcher = areaPattern.matcher(trimmed);
-            Matcher visitorMatcher = visitorPattern.matcher(trimmed);
+    private static List<NetworkPlayerInfo> fetchTabEntries(){
+        List<NetworkPlayerInfo> entries = emptyList();
+        if(mc.thePlayer != null){
 
-            switch (trimmed) {
-                case "Volcano Explosivity:":
-                    exploFlag = true;
-                    break;
-                case "Dungeon Stats":
-                    area = "Dungeon";
-                    break;
-                case "Time Left: ":
-                    emptyComposter = "INACTIVE".equals(trimmed.split(": ")[1]);
-                    break;
-                case "Milestone":
-                    gardenMilestone = trimmed;
-                    break;
-                case "(Archer":
-                    archerName = line.split(" ")[1];
-                    break;
-                case "Garden Level:":
-                    gardenLevel = line.split(" ")[1];
-                    break;
+            entries = p.sortedCopy(mc.thePlayer.sendQueue.getPlayerInfoMap());
+        }
+        return entries;
+    }
 
-                default:
-                    if (areaMatcher.matches()) {
-                        area = areaMatcher.group(1);
-                    } else if (exploFlag) {
-                        exploFlag = false;
-                        explosivity = !"INACTIVE".equals(trimmed);
-                    } else if (visitorMatcher.find()) {
-                        timeTillNextVisitor = visitorMatcher.group(1);
-                        maxVisitors = "Queue Full!".equals(timeTillNextVisitor);
-                        numVisitorsFlag = true;
-                        int index = scoreboardList.indexOf(line) + 1;
-                        int visitors = 0;
-                        while (index < scoreboardList.size() && !"".equals(scoreboardList.get(index)) && visitors < 5) {
-                            visitors++;
-                            index++;
-                        }
-                        numVisitors = visitors;
-                    }
-                    break;
+
+    public static void parseTabEntries(){
+        if(mc.thePlayer == null) return;
+        if(mc.theWorld == null) return;
+
+        List<String> scoreboardList = mapNotNull(fetchTabEntries());
+
+        for(String line : scoreboardList){
+            trim = line.trim();
+
+            Matcher matcher = areaPattern.matcher(trim);
+            if (matcher.find()) {
+                area = matcher.group(1);
+            }
+
+            if(petFlag && petFlagCount <= 1){
+                if(petFlagCount == 0) petName = line.substring(trim.indexOf(']')+2);
+                if(petFlagCount == 1) petXp = line;
+
+                petFlagCount++;
+            }else{
+                petFlagCount = 0;
+                petFlag = false;
             }
 
 
+            if (trim.contains("Contasdasdest:")) {
+                //System.out.println(trim);
+                if (scoreboardList == null) {
+                    return;
+                }
+                int index = scoreboardList.indexOf(line) + 1;
+                if (index == -1) {
+                    return;
+                }
+                time = scoreboardList.get(index).substring(scoreboardList.get(index).indexOf(": ") + 2);
+                index++;
+                first = scoreboardList.get(index);
+                index++;
+                second = scoreboardList.get(index);
+                index++;
+                third = scoreboardList.get(index);
+            } else if (trim.contains("Garden Level:")) {
+                String split = trim.substring(trim.indexOf(":")+1);
+                String lvl = split.split(" ")[1];
+                lvl = lvl.replace(" ", "");
+                Integer test = NumberUtils.getNumber(lvl);
 
-        }
+                if(test != null) {
+                    //gardenLevel = Integer.parseInt(trim.substring(trim.indexOf(":") + 2 /*trim.indexOf(":") + 4*/).replace(" ", ""));
+                    gardenLevel = test.intValue();
+                    if (gardenLevel != 15) {
+                        gardenPercent = Double.parseDouble(trim.substring(trim.indexOf("(") + 1, trim.indexOf(")") - 7));
+                    }
+                }else{
+                    if(!Objects.equals(lvl, "XV")){
+                        //String percent = split.split(" ")[1];
+                        gardenLevel = NumberUtils.toInteger(lvl);
+                        gardenPercent = Double.parseDouble(trim.substring(trim.indexOf("(") + 1, trim.indexOf(")") - 1));
+                    }else gardenLevel= NumberUtils.toInteger("XV");
+                }
 
-        if (!"Dungeon".equals(area)) {
-            archerName = "";
-        }
-        if (!"Crimson Isle".equals(area)) {
-            explosivity = false;
-        }
-        if (!"Garden".equals(area)) {
-            maxVisitors = false;
-        }
-        if (!numVisitorsFlag) {
-            numVisitors = 0;
+            }else if(trim.contains("Pet:")){
+                 petFlag = true;
+            }else if(trim.contains("Dungeon: Catacombs")){
+                area = "Catacombs";
+            }
+
+            if (line.contains("(Archer")) {
+                archerName = line.split(" ")[1];
+            } else if (line.contains("(Tank")) {
+                tankName = line.split(" ")[1];
+            } else if (line.contains("(Mage")) {
+                mageName = line.split(" ")[1];
+            } else if (line.contains("(Healer")) {
+                healerName = line.split(" ")[1];
+            } else if (line.contains("(Berserker")) {
+                berserkerName = line.split(" ")[1];
+            }
+
         }
     }
 
+    private static boolean isSpectator(WorldSettings.GameType gameType) {
+        return gameType == WorldSettings.GameType.SPECTATOR;
+    }
 
+    private static List<String> mapNotNull(List<NetworkPlayerInfo> tabEntries) {
+        return tabEntries.stream()
+                .map(info -> info.getDisplayName() != null ? info.getDisplayName().getUnformattedText() : null)
+                .filter(displayName -> displayName != null)
+                .collect(Collectors.toList());
+    }
 
-    // Assuming NetworkPlayerInfo and GameType are classes you have in your environment.
-    // You would need to implement or import these classes as appropriate for your application.
+    Collection<NetworkPlayerInfo> playerOrdering = null;
+
+    public List<String> readTabList(){
+        EntityPlayerSP thePlayer = Minecraft.getMinecraft().thePlayer;
+        playerOrdering  = thePlayer.sendQueue.getPlayerInfoMap();
+        List<String> result = new ArrayList<>();
+        for(NetworkPlayerInfo info : playerOrdering){
+            String name = mc.ingameGUI.getTabList().getPlayerName(info);
+            result.add(stripVanillaMessage(name));
+        }
+        if (!result.isEmpty()) {
+            result.remove(result.size() - 1);
+        }
+        return result;
+    }
+
+    private String stripVanillaMessage(String orignalMessage){
+        String message = orignalMessage;
+        while (message.startsWith("§r")) {
+            message = message.substring(2);
+        }
+        while (message.endsWith("§r")) {
+            message = message.substring(0, message.length() - 2);
+        }
+        return message;
+    }
+
+    @SubscribeEvent
+    public void onTick(TickEvent.ClientTickEvent event) {
+        tablist = readTabList();
+        for(String t : tablist){
+            System.out.println(t);
+        }
+    }
 
 
 }
-
-
-/*
-if (areaMatcher.matches()) {
-                area = areaMatcher.group(1);
-            } else if ("Volcano Explosivity:".equals(trimmed)) {
-                exploFlag = true;
-            } else if (exploFlag) {
-                exploFlag = false;
-                explosivity = !"INACTIVE".equals(trimmed);
-            } else if ("Dungeon Stats".equals(trimmed)) {
-                area = "Dungeon";
-            } else if (trimmed.startsWith("Time Left: ")) {
-                emptyComposter = "INACTIVE".equals(trimmed.split(": ")[1]);
-            } else if (trimmed.startsWith("Milestone")) {
-                gardenMilestone = trimmed;
-            } else if (visitorMatcher.find()) {
-                timeTillNextVisitor = visitorMatcher.group(1);
-                maxVisitors = "Queue Full!".equals(timeTillNextVisitor);
-                numVisitorsFlag = true;
-                int index = scoreboardList.indexOf(line) + 1;
-                int visitors = 0;
-                while (index < scoreboardList.size() && !"".equals(scoreboardList.get(index)) && visitors < 5) {
-                    visitors++;
-                    index++;
-                }
-                numVisitors = visitors;
-            } else if (line.contains("(Archer")) {
-                archerName = line.split(" ")[1];
-            }
- */

@@ -21,7 +21,7 @@ public class Terminals {
         EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
 
 
-        if(player.posY < 145 && player.posY > 100 && player.posX < 115 && player.posX > 0 && player.posZ < 150 && player.posZ > 20 && (CheckCatacombs.floor.contains("F7") || CheckCatacombs.inM7)){
+        if(player.posY < 145 && player.posY > 100 && player.posX < 115 && player.posX > 0 && player.posZ < 150 && player.posZ > 20 && (CheckCatacombs.floor.contains("F7") || CheckCatacombs.inM7())){
 
 
             Entity viewer = Minecraft.getMinecraft().getRenderViewEntity();

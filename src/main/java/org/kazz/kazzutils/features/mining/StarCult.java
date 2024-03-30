@@ -6,7 +6,6 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import org.kazz.kazzutils.handler.ScoreboardHandler;
 import org.kazz.kazzutils.utils.ChatUtils;
-import org.kazz.kazzutils.utils.RenderUtils;
 
 import java.util.List;
 
@@ -36,7 +35,7 @@ public static boolean firstTick = false;
                 ChatUtils.messageToChat(EnumChatFormatting.RED +  "------------STAR CULT------------");
                 ChatUtils.messageToChat(EnumChatFormatting.BLUE + "--------------------------------");
 
-                RenderUtils.showTitle(EnumChatFormatting.RED + "STAR CULT","",0,20,0);
+                //RenderUtils.showTitle(EnumChatFormatting.RED + "STAR CULT","",0,20,0);
 
                 world.playSound(player.posX, player.posY, player.posZ, "random.orb",1F,1F,false);
                 break;

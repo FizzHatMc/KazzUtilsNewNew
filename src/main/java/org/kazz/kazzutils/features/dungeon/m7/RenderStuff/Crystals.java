@@ -18,7 +18,7 @@ public class Crystals {
     @SubscribeEvent
     public void onWorldRender(RenderWorldLastEvent event){
         EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
-        if (player.posY > 220 && (Config.dunClass == 1 || Config.dunClass == 3) && (CheckCatacombs.floor.contains("F7") || CheckCatacombs.inM7)) {
+        if (player.posY > 220 && (Config.dunClass == 1 || Config.dunClass == 3) && (CheckCatacombs.floor.contains("F7") || CheckCatacombs.inM7())) {
             Entity viewer = Minecraft.getMinecraft().getRenderViewEntity();
             double viewerX = viewer.lastTickPosX + (viewer.posX - viewer.lastTickPosX) * event.partialTicks;
             double viewerY = viewer.lastTickPosY + (viewer.posY - viewer.lastTickPosY) * event.partialTicks;
