@@ -5,6 +5,7 @@ pluginManagement {
         gradlePluginPortal()
         mavenCentral()
         maven("https://repo.polyfrost.org/releases") // Adds the Polyfrost maven repository to get Polyfrost Gradle Toolkit
+        maven ("https://repo.hypixel.net/repository/Hypixel/")
     }
     plugins {
         val pgtVersion = "0.2.9" // Sets the default versions for Polyfrost Gradle Toolkit

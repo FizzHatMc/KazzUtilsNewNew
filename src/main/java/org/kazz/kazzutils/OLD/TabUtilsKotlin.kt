@@ -1,4 +1,4 @@
-package org.kazz.kazzutils.utils
+package org.kazz.kazzutils.OLD
 
 import com.google.common.collect.ComparisonChain
 import com.google.common.collect.Ordering

@@ -2,6 +2,7 @@ package org.kazz.kazzutils;
 
 import cc.polyfrost.oneconfig.events.event.InitializationEvent;
 import cc.polyfrost.oneconfig.utils.commands.CommandManager;
+import net.hypixel.modapi.HypixelModAPI;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
@@ -15,11 +16,17 @@ import org.kazz.kazzutils.command.debug;
 import org.kazz.kazzutils.command.openGUI;
 import org.kazz.kazzutils.config.Config;
 import org.kazz.kazzutils.features.chatCommands.PartyCommands;
+import org.kazz.kazzutils.features.dungeon.ClassHighlight;
+import org.kazz.kazzutils.features.dungeon.f7.Crystals;
 import org.kazz.kazzutils.features.dungeon.Hud.BonzoSpirit;
+import org.kazz.kazzutils.features.dungeon.TankStuff;
+import org.kazz.kazzutils.features.dungeon.f7.Terminals;
 import org.kazz.kazzutils.features.dungeon.m7.RenderStuff.*;
-import org.kazz.kazzutils.features.events.mytho.hud.mobTrackerHud;
+import org.kazz.kazzutils.features.dungeon.m7.dragons.DragonsBoxesLines;
+import org.kazz.kazzutils.features.dungeon.m7.dragons.dragPrio;
 import org.kazz.kazzutils.features.events.mytho.mobTracker;
 import org.kazz.kazzutils.features.farming.GardenPlots;
+import org.kazz.kazzutils.features.mining.Commisions;
 import org.kazz.kazzutils.features.mining.StarCult;
 import org.kazz.kazzutils.features.render.GyroRange;
 import org.kazz.kazzutils.utils.CheckCatacombs;
@@ -39,11 +46,13 @@ public class KazzUtils {
     public static final String NAME = "@NAME@";
     public static final String VERSION = "@VER@";
     // Sets the variables from `gradle.properties`. See the `blossom` config in `build.gradle.kts`.
-    public long tickammount;
     @Mod.Instance(MODID)
+    public long tickammount;
     public static KazzUtils INSTANCE; // Adds the instance of the mod, so we can access other variables.
     public static Config config;
     public static Minecraft mc = Minecraft.getMinecraft();
+    public static HypixelModAPI API = HypixelModAPI.getInstance();
+
 
     // Register the config and commands.
     @Mod.EventHandler
@@ -55,27 +64,28 @@ public class KazzUtils {
         MinecraftForge.EVENT_BUS.register(new TitleUtils());
     }
 
+    private void reg(Object object){
+        MinecraftForge.EVENT_BUS.register(object);
+    }
+
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        EventBus mfe = MinecraftForge.EVENT_BUS;
-        // mfe.register(new );
-
-        mfe.register(this);
-        mfe.register(new Terminals());
-        mfe.register(new Crystals());
-        mfe.register(new Relics());
-        mfe.register(new DragonsBoxesLines());
-        mfe.register(new CheckCatacombs());
-        mfe.register(new Colorblind());
-        mfe.register(new BonzoSpirit());
-
-        mfe.register(new GardenPlots());
-        mfe.register(new GyroRange());
-        mfe.register(new TankStuff());
-        mfe.register(new ClassHighlight());
-        mfe.register(new PartyCommands());
-        mfe.register(new mobTracker());
-
+        reg(this);
+        reg(new Terminals());
+        reg(new Crystals());
+        reg(new Relics());
+        reg(new DragonsBoxesLines());
+        reg(new CheckCatacombs());
+        reg(new Colorblind());
+        reg(new BonzoSpirit());
+        reg(new dragPrio());
+        reg(new GardenPlots());
+        reg(new GyroRange());
+        reg(new TankStuff());
+        reg(new ClassHighlight());
+        reg(new PartyCommands());
+        reg(new mobTracker());
+        reg(new Commisions());
     }
 
     @SubscribeEvent
@@ -83,17 +93,15 @@ public class KazzUtils {
         //if (event.phase != TickEvent.Phase.START);
         tickammount++;
         if (mc.theWorld != null && mc.thePlayer != null) {
+            if(tickammount % 2 == 0) {
+                TabUtils.parseTabEntries();
+            } //each 1/10th Second
             if (tickammount % 20 == 0) {
                 if (!StarCult.firstTick && Config.starCult) StarCult.checkCult();
                 CheckCatacombs.checkCata();
-                TabUtils.parseTabEntries();
             } //each second
             if (tickammount % 300 == 0) {
                 StarCult.firstTick = false;
-
-                //TabUtilsKotlin.INSTANCE.parseTabEntries();
-
-
             } // 30 Sec
             if (tickammount % 1200 == 0) {
 

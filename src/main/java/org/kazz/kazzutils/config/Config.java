@@ -10,6 +10,7 @@ import org.kazz.kazzutils.features.events.mytho.hud.mobTrackerHud;
 import org.kazz.kazzutils.features.farming.hud.GardenLevel;
 import org.kazz.kazzutils.features.farming.hud.NextContest;
 import org.kazz.kazzutils.features.hud.PetOverlay;
+import org.kazz.kazzutils.features.mining.Commisions;
 
 
 /**
@@ -133,6 +134,13 @@ public class Config extends cc.polyfrost.oneconfig.config.Config {
             subcategory = "M7"
     )public static boolean dragLines = false;
 
+    @Switch(
+            name = "Dragon Spawn Notif",
+            description = "Notifies when a Dragon Spawns in M7",
+            category = "Dungeon",
+            subcategory = "M7"
+    )public static boolean dragNotif = true;
+
     @Color(
             name = "Bonzo/Spirit Color",
             description = "Changes the Color of the Bonzo/Spirit Notifaction",
@@ -248,6 +256,10 @@ public class Config extends cc.polyfrost.oneconfig.config.Config {
             category = "Tab Widgets"
     )public static PetOverlay petOverlay = new PetOverlay();
 
+    @HUD(
+            name = "Commissions Overlay",
+            category = "Tab Widgets"
+    )public static Commisions commisions = new Commisions();
 
 
 

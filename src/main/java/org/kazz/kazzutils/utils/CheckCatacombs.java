@@ -27,7 +27,7 @@ public class CheckCatacombs {
     private static String lastmsg;
     public static boolean inM7 = false;
     public static String floor = "n";
-    public static final double a = 13.5;
+
     public static final BlockPos[] red = {new BlockPos(27,14,58), new BlockPos(40,20,45)};
     public static final BlockPos[] orange = {new BlockPos(84,14,55), new BlockPos(77,18,59), new BlockPos(81,19,68)};
     public static final BlockPos[] green = {new BlockPos(27,15,94), new BlockPos(24,19,82)};
@@ -137,6 +137,8 @@ public class CheckCatacombs {
         // private final ResourceLocation texture;
         private final AxisAlignedBB bb;
         private final BlockPos particleLocation;
+        public final static double particleYConstant = 19.0;
+        private final static double a = 13.5;
         private BlockPos[] lineCoords;
         private final BlockPos relic;
         private final BlockPos dragonText;

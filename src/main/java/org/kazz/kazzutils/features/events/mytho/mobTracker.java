@@ -3,6 +3,7 @@ package org.kazz.kazzutils.features.events.mytho;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.kazz.kazzutils.utils.ChatUtils;
+import org.kazz.kazzutils.utils.TabUtils;
 import scala.Int;
 
 public class mobTracker {
@@ -15,8 +16,8 @@ public class mobTracker {
     public static int totalMobs = 0;
     public static double coins = 0;
     public static double burrows = 0;
+    public static int sinceInq = 0;
 
-    public static double inqChance = 0;
     public static double champChance = 0;
     public static double minoChance = 0;
     public static double gaiaChance = 0;
@@ -30,32 +31,39 @@ public class mobTracker {
     public static int champ2 = 0;
     public static int inq2 = 0;
 
-
+    public static double inqChance = 0;
 
     @SubscribeEvent
     public void onChat(ClientChatReceivedEvent event) {
         if (event.type == 2) return;
-
         String message = event.message.getUnformattedText();
-        //ChatUtils.userError(message);
+
         if(message.contains("You dug out a Minos Inquisitor!")){
             //ChatUtils.userError("inq:"+inq);
             inq++;
+            sinceInq = 0;
+
         } else if (message.contains("You dug out a Minos Champion!")) {
             //ChatUtils.userError("champ:"+champ);
             champ++;
+            sinceInq++;
+
         }else if (message.contains("You dug out a Minotaur!")){
             //ChatUtils.userError("mino:"+mino);
             mino++;
+            sinceInq++;
         }else if (message.contains("You dug out a Gaia Construct!")){
             //ChatUtils.userError("gaia:"+gaia);
             gaia++;
+            sinceInq++;
         }else if (message.contains("You dug out Siamese Lynxes!")){
             //ChatUtils.userError("lynx:"+lynx);
             lynx++;
+            sinceInq++;
         }else if (message.contains("You dug out a Minos Hunter!")){
             //ChatUtils.userError("hunter:"+hunter);
             hunter++;
+            sinceInq++;
         }else if (message.contains("You dug out") && message.contains("coins!")){
             String coin = message.substring(message.indexOf("out")+4,message.indexOf("coins!")-1).replace(",","");
             int coins2 = Integer.parseInt(coin);
@@ -67,7 +75,7 @@ public class mobTracker {
 
             coins +=  coins3;
 
-        }else if(message.contains("You dug out a Griffin Feather! ")){
+        }else if(message.contains("You dug out a Griffin Feather!")){
             feathers++;
         }else if (message.contains("You dug out a Griffin Burrow!")) burrows++;
 

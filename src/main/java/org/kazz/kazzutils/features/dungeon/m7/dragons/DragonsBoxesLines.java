@@ -1,4 +1,4 @@
-package org.kazz.kazzutils.features.dungeon.m7.RenderStuff;
+package org.kazz.kazzutils.features.dungeon.m7.dragons;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.BlockPos;

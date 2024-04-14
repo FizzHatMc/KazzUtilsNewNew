@@ -1,4 +1,4 @@
-package org.kazz.kazzutils.features.dungeon.m7.RenderStuff;
+package org.kazz.kazzutils.features.dungeon;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
@@ -39,9 +39,6 @@ public class ClassHighlight {
                 case 4:
                     className = TabUtils.archerName;
                     break;
-                default:
-                    break;
-
             }
 
 

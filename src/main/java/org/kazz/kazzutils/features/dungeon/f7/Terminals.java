@@ -1,4 +1,4 @@
-package org.kazz.kazzutils.features.dungeon.m7.RenderStuff;
+package org.kazz.kazzutils.features.dungeon.f7;
 
 
 import net.minecraft.client.Minecraft;

@@ -1,8 +1,8 @@
 {
   "compatibilityLevel": "JAVA_8",
   "minVersion": "0.7",
-  "package": "cc.kazz.sbtrackers.mixin",
-  "refmap": "mixins.sbtrackers.refmap.json",
+  "package": "org.kazz.kazzutils.mixin",
+  "refmap": "mixins.kazz.refmap.json",
   "injectors": {
     "maxShiftBy": 5
   },

@@ -108,9 +108,6 @@ public class PartyCommands {
                 case "allinv":
                     ChatUtils.userMessage("/party setting allinvite");
                     break;
-                default:
-                    ChatUtils.userMessage("Unknown command: " + command);
-                    break;
             }
 
 

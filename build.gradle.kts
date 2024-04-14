@@ -90,6 +90,7 @@ sourceSets {
 // Adds the Polyfrost maven repository so that we can get the libraries necessary to develop the mod.
 repositories {
     maven("https://repo.polyfrost.org/releases")
+    maven ("https://repo.hypixel.net/repository/Hypixel/")
 }
 
 // Configures the libraries/dependencies for your mod.
@@ -98,6 +99,8 @@ dependencies {
     modCompileOnly("cc.polyfrost:oneconfig-$platform:0.2.2-alpha+")
 
     modRuntimeOnly("me.djtheredstoner:DevAuth-${if (platform.isFabric) "fabric" else if (platform.isLegacyForge) "forge-legacy" else "forge-latest"}:1.2.0")
+
+    implementation("net.hypixel:mod-api:0.1.6")
 
     // If we are building for legacy forge, includes the launch wrapper with `shade` as we configured earlier.
     if (platform.isLegacyForge) {

@@ -55,6 +55,7 @@ public class TabUtils {
     //public static String petXp = "";
     public static Boolean gardenLevelBool = false;
     public static String gardenLevelString = "";
+    public static ArrayList<String> comms = new ArrayList<String>();
 
     public static EntityPlayer getPlayerByName(String playerName) {
         List<EntityPlayer> players = mc.theWorld.playerEntities; // Assuming mc is your Minecraft instance
@@ -97,6 +98,7 @@ public class TabUtils {
 
 
     public static void parseTabEntries(){
+        comms.clear();
         if(mc.thePlayer == null) return;
         if(mc.theWorld == null) return;
 
@@ -161,6 +163,16 @@ public class TabUtils {
                  petFlag = true;
             }else if(trim.contains("Dungeon: Catacombs")){
                 area = "Catacombs";
+            }else if(trim.contains("Commissions:")){
+                area = "Dwarven";
+                int index2 = scoreboardList.indexOf(line) +1 ;
+                comms.add(scoreboardList.get(index2));
+                index2++;
+                comms.add(scoreboardList.get(index2));
+                index2++;
+                comms.add(scoreboardList.get(index2));
+                index2++;
+                comms.add(scoreboardList.get(index2));
             }
 
             if (line.contains("(Archer")) {
