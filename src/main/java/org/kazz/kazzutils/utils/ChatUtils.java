@@ -15,7 +15,12 @@ public class ChatUtils {
         mc.thePlayer.sendChatMessage(message);
     }
 
+    public static void messageToChat(EnumChatFormatting e, String message){
+        mc.thePlayer.addChatMessage(new ChatComponentText(e+message));
+    }
+
     public static void userError(String message){
         mc.thePlayer.addChatMessage(new ChatComponentText(EnumChatFormatting.RED+message));
     }
+
 }

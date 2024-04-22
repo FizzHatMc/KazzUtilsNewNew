@@ -5,6 +5,7 @@ import com.google.common.collect.Ordering
 import net.minecraft.client.Minecraft
 import net.minecraft.client.network.NetworkPlayerInfo
 import net.minecraft.world.WorldSettings
+import org.kazz.kazzutils.config.Config
 
 object TabUtilsKotlin {
     private val visitorPattern = "Visitors: \\((.+)\\)".toRegex()
@@ -55,6 +56,7 @@ object TabUtilsKotlin {
      * to happen somewhat frequently.
      */
     fun parseTabEntries() {
+
         if(mc.thePlayer == null) return
         if(mc.theWorld == null) return
 

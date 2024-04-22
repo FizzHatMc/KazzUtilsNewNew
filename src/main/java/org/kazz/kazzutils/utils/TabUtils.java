@@ -232,7 +232,7 @@ public class TabUtils {
     public void onTick(TickEvent.ClientTickEvent event) {
         tablist = readTabList();
         for(String t : tablist){
-            System.out.println(t);
+            //System.out.println(t);
         }
     }
 

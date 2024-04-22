@@ -6,6 +6,7 @@ import cc.polyfrost.oneconfig.config.data.InfoType;
 import cc.polyfrost.oneconfig.config.data.Mod;
 import cc.polyfrost.oneconfig.config.data.ModType;
 import org.kazz.kazzutils.KazzUtils;
+import org.kazz.kazzutils.features.dungeon.Hud.ArrowSoulflow;
 import org.kazz.kazzutils.features.events.mytho.hud.mobTrackerHud;
 import org.kazz.kazzutils.features.farming.hud.GardenLevel;
 import org.kazz.kazzutils.features.farming.hud.NextContest;
@@ -146,6 +147,7 @@ public class Config extends cc.polyfrost.oneconfig.config.Config {
             description = "Changes the Color of the Bonzo/Spirit Notifaction",
             category = "Dungeon"
     )public static OneColor bonzoColor = new OneColor(0, 255, 0,100);
+
 
 
 
@@ -297,6 +299,11 @@ public class Config extends cc.polyfrost.oneconfig.config.Config {
 
 
 
+    @HUD(
+            name = "Notify Arrows and Soulflow low",
+            category = "Hud"
+    )public static ArrowSoulflow arrowSoulflow = new ArrowSoulflow();
+
 
 
 /*
@@ -310,7 +317,7 @@ public class Config extends cc.polyfrost.oneconfig.config.Config {
 
     public Config() {
         super(new Mod(KazzUtils.NAME, ModType.UTIL_QOL), KazzUtils.MODID + ".json");
-        addDependency("gardenPercentage", () -> gardenLevel.isEnabled());
+        //addDependency("gardenPercentage", () -> gardenLevel.isEnabled());
         initialize();
     }
 }

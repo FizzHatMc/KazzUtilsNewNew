@@ -5,8 +5,6 @@ import org.kazz.kazzutils.KazzUtils;
 
 public class testApi  {
 
-    public static void main(String[] args) {
 
-    }
 
 }
