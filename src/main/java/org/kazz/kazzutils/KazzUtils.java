@@ -27,6 +27,7 @@ import org.kazz.kazzutils.features.dungeon.m7.dragons.DragonsBoxesLines;
 import org.kazz.kazzutils.features.dungeon.m7.dragons.dragPrio;
 import org.kazz.kazzutils.features.events.mytho.mobTracker;
 import org.kazz.kazzutils.features.farming.GardenPlots;
+import org.kazz.kazzutils.features.farming.hud.Pests;
 import org.kazz.kazzutils.features.mining.Commisions;
 import org.kazz.kazzutils.features.mining.StarCult;
 import org.kazz.kazzutils.features.render.GyroRange;
@@ -90,6 +91,7 @@ public class KazzUtils {
         reg(new mobTracker());
         reg(new Commisions());
         reg(new ArrowSoulflow());
+        reg(new Pests());
     }
 
     public long tickammount = 0;

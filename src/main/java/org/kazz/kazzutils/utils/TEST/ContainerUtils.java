@@ -1,7 +1,13 @@
 package org.kazz.kazzutils.utils.TEST;
 
+import net.minecraft.client.gui.inventory.GuiChest;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ContainerChest;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -40,6 +46,53 @@ public class ContainerUtils {
         for (int i = 0; i < inventory2.getSizeInventory(); i++) {
             if(inventory2.getStackInSlot(i) == null) continue;
             if(inventory2.getStackInSlot(i).getDisplayName().contains(itemName)) return inventory2.getStackInSlot(i);
+        }
+        return null;
+    }
+
+    public static List<Slot> getItemsInOpenChest() {
+        List<Slot> slots = new ArrayList<>();
+        Object screen = mc.currentScreen;
+        if (screen instanceof GuiChest) {
+            GuiChest guiChest = (GuiChest) screen;
+            Container container = guiChest.inventorySlots;
+            if (container instanceof ContainerChest) {
+                ContainerChest chest = (ContainerChest) container;
+                for (Object slotObj : chest.inventorySlots) {
+                    if (slotObj instanceof Slot) {
+                        Slot slot = (Slot) slotObj;
+                        if (slot.inventory instanceof InventoryPlayer) {
+                            break;
+                        }
+                        if (slot.getStack() != null) {
+                            slots.add(slot);
+                        }
+                    }
+                }
+            }
+        }
+        return slots;
+    }
+
+
+
+    public static String openInventoryName() {
+        Object screen = mc.currentScreen;
+        if (screen instanceof GuiChest) {
+            GuiChest guiChest = (GuiChest) screen;
+            Container container = guiChest.inventorySlots;
+            if (container instanceof ContainerChest) {
+                ContainerChest chest = (ContainerChest) container;
+                return chest.getLowerChestInventory().getDisplayName().getFormattedText().trim();
+            }
+        }
+        return "";
+    }
+
+
+    public static GuiContainer getCurrentScreen(){
+        if (mc.currentScreen instanceof GuiContainer) {
+            return (GuiContainer) mc.currentScreen;
         }
         return null;
     }
