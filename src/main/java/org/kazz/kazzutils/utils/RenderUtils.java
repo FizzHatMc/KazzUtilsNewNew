@@ -415,7 +415,8 @@ public class RenderUtils {
         tes.draw();
         GlStateManager.disableBlend();
         GlStateManager.popMatrix();
-
+        GlStateManager.enableTexture2D();
+        GlStateManager.enableLighting();
     }
 
     public static void renderBoxOutline(BlockPos pos, int width, int height, int depth, float partialTicks, float lineWidth, Color c, float alphaMultiplier) {

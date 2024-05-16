@@ -48,6 +48,7 @@ public class KazzUtils {
     public static final String MODID = "@ID@";
     public static final String NAME = "@NAME@";
     public static final String VERSION = "@VER@";
+    public static final String modDir = Minecraft.getMinecraft().mcDataDir.getPath();
     // Sets the variables from `gradle.properties`. See the `blossom` config in `build.gradle.kts`.
     @Mod.Instance(MODID)
 
